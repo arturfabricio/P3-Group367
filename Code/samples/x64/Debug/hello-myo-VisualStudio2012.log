@@ -1,0 +1,11 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (emg-data-sample-VisualStudio2012.vcxproj, emg-data-sample-VisualStudio2013.vcxproj, hello-myo-VisualStudio2012.vcxproj, hello-myo-VisualStudio2013.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Serial.cpp
+  pose.cpp
+C:\Users\artur\Desktop\CodeMyoBandTeste\include\myo\cxx\detail\ThrowOnError.hpp(39,1): warning C4297: 'myo::ThrowOnError::~ThrowOnError': function assumed not to throw an exception but does
+C:\Users\artur\Desktop\CodeMyoBandTeste\include\myo\cxx\detail\ThrowOnError.hpp(39,1): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+C:\Users\artur\Desktop\CodeMyoBandTeste\include\myo\cxx\detail\ThrowOnError.hpp(45,1): warning C4297: 'myo::ThrowOnError::~ThrowOnError': function assumed not to throw an exception but does
+  Generating Code...
+C:\Users\artur\Desktop\CodeMyoBandTeste\include\myo\cxx\detail\ThrowOnError.hpp(45,1): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+  hello-myo-VisualStudio2012.vcxproj -> C:\Users\artur\Desktop\CodeMyoBandTeste\samples\x64\Debug\hello-myo.exe
+  Copy required dlls to output directory
+          1 file(s) copied.
