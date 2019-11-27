@@ -23,16 +23,14 @@ std::string poseString;
 vector<string> myArray;
 int i = 0;
 
-class DataCollector : public myo::DeviceListener {     // Classes that inherit from myo::DeviceListener can be used to receive events from Myo devices. DeviceListener provides several virtual functions for handling different kinds of events.
+class DataCollector : public myo::DeviceListener {									 // Classes that inherits from myo::DeviceListener can be used to receive events from Myo devices. DeviceListener provides several virtual functions for handling different kinds of events.
 public:
 	DataCollector()
 		: onArm(false), isUnlocked(false), pitch_w(0), currentPose()
 	{
 	}
 
-	// onOrientationData() is called whenever the Myo device provides its current orientation, which is represented
-	// as a unit quaternion.
-	void onOrientationData(myo::Myo* myo, uint64_t timestamp, const myo::Quaternion<float>& quat)
+	void onOrientationData(myo::Myo* myo, uint64_t timestamp, const myo::Quaternion<float>& quat)               // onOrientationData() is called whenever the Myo device provides its current orientation, which is represented as a unit quaternion.
 	{
 		using std::atan2;
 		using std::asin;
@@ -43,11 +41,9 @@ public:
 		// Calculate Euler angles (roll, pitch, and yaw) from the unit quaternion.
 		float pitch = asin(max(-1.0f, min(1.0f, 2.0f * (quat.w() * quat.y() - quat.z() * quat.x()))));
 		pitch_w = static_cast<int>((pitch + (float)M_PI / 2.0f) / M_PI * 18);
-
 	}
 
 	void onPose(myo::Myo* myo, uint64_t timestamp, myo::Pose pose) {                                         // onPose() is called whenever the Myo detects that the person wearing it has changed their pose, for example, making a fist, or not making a fist anymore.
-
 		currentPose = pose;
 		if (pose != myo::Pose::unknown && pose != myo::Pose::rest) {                                         // Tell the Myo to stay unlocked until told otherwise. We do that here so you can hold the poses without the Myo becoming locked.
 			myo->unlock(myo::Myo::unlockHold);
@@ -63,38 +59,31 @@ public:
 		whichArm = arm;
 	}
 
-	void onArmUnsync(myo::Myo* myo, uint64_t timestamp)                                                              // onArmUnsync() is called whenever Myo has detected that it was moved from a stable position on a person's arm after it recognized the arm.
-	{
-		onArm = false;
-	}
+	void onArmUnsync(myo::Myo* myo, uint64_t timestamp) { onArm = false; }                                                              // onArmUnsync() is called whenever Myo has detected that it was moved from a stable position on a person's arm after it recognized the arm.
+	void onUnlock(myo::Myo* myo, uint64_t timestamp) { isUnlocked = true; }                                                                 // onUnlock() is called whenever Myo has become unlocked, and will start delivering pose events.
+	void onLock(myo::Myo* myo, uint64_t timestamp) { isUnlocked = false; }                                                                   // onLock() is called whenever Myo has become locked. No pose events will be sent until the Myo is unlocked again.
 
-	void onUnlock(myo::Myo* myo, uint64_t timestamp)                                                                 // onUnlock() is called whenever Myo has become unlocked, and will start delivering pose events.
-	{
-		isUnlocked = true;
-	}
 
-	void onLock(myo::Myo* myo, uint64_t timestamp)                                                                   // onLock() is called whenever Myo has become locked. No pose events will be sent until the Myo is unlocked again.
+	void print()																										  // We define this function to print the current values that were updated by the on...() functions above.
 	{
-		isUnlocked = false;
-	}
-
-	void print()															   // We define this function to print the current values that were updated by the on...() functions above.
-	{
-		if (onArm) {													  // Print out the lock state, the currently recognized pose, and which arm Myo is being worn on.
+		if (onArm) {																									  // Print out the lock state, the currently recognized pose, and which arm Myo is being worn on.
 			std::cout << (pitch_w) << "  ";
 			std::string poseString = currentPose.toString();
 
 			if (pitch_w > 15) {
-				std::cout << "NewMode" << std::endl;
-				myArray.push_back("NewMode");
+				std::cout << "modetwo" << std::endl;
+				myArray.push_back("modetwo");
 			}
-
+			else if(pitch_w < 2){
+				std::cout << "modeone" << std::endl;
+				myArray.push_back("modeone");		
+			}
 			else {
 				std::cout << poseString << std::endl;
 				myArray.push_back(poseString);
 			}
 		}
-		else { std::cout << "[?]" << std::endl; }							 // Print out a placeholder for the arm and pose when Myo doesn't currently know which arm it's on.	
+		else { std::cout << "[?]" << std::endl; }															   // Print out a placeholder for the arm and pose when Myo doesn't currently know which arm it's on.	
 		std::cout << std::flush;
 	}
 	bool onArm;																			                       // These values are set by onArmSync() and onArmUnsync() above.
